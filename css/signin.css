@@ -1,0 +1,48 @@
+
+
+body{
+    background-image: url(../gambar/andrew-ridley-76547-unsplash.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
+    font-family:Calibri;
+    background-size: cover;
+}
+
+.box-sign-in{
+    border-radius:5px;
+    width: 300px;
+    margin:3% auto;
+    background-color:rgba(255, 255, 255, 0.616);
+    padding: 20px;
+}
+
+.input{
+    width:100%;
+    height: 30px;
+    margin-bottom: 20px;
+    font-size:12px;
+    border-radius: 3px;
+    border:1px solid rgb(196,196,196);
+    text-indent: 3px;
+}
+
+.btn-custom{
+    height: 30px;
+    font-size:12px;
+    border:1px solid rgb(196,196,196);
+}
+
+.btn-custom:hover{
+    background-color:rgb(255, 157, 0);
+}
+
+.box-form{
+    position: relative;
+}
+
+.box-form i{
+    position: absolute;
+    right:5px;
+    top:6px;
+}

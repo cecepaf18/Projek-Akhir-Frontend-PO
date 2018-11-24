@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Request PO</title>
+	<link rel="icon" type="image/x-icon" src="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+	<script src="main.js"></script>
+</head>
+<body>
+
+    <!-- navbar -->
+    <nav class="navbar navbar-light navbar-custom">
+        <a class="navbar-brand text-white">CEKIDIN CORPORATION</a>
+        <form class="form-inline">
+            <a class="btn-custom2" href="signIn.html">
+                <i class="fas fa-fw fa-sign-out-alt"></i>Sign Out</a>
+        </form>
+    </nav>
+
+    <!---------- sidebar ------------>
+    <div class="sidenav">
+
+        
+        <div class="sidebar-text-box my-5">
+            <h6 class="sidebar-text" id="namaStaff">Nama Staff Purchasing</h6>
+            <h6 class="sidebar-text" id="rolePosition">Role Position</h6>
+            <h6 class="sidebar-text" id="npwp">NPWP</h6>
+        </div>
+          
+        <li class="nav-item">
+            <a class="nav-link" href="dashBoard.html">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="createPo.html">
+            <i class="fas fa-fw fa-file"></i>
+            <span>Create PO</span></a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link text-body" href="requestPo.html">
+            <i class="fas fa-fw fa-file"></i>
+            <span>Request PO</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="">
+            <i class="fas fa-fw fa-ticket-alt"></i>
+            <span>Ticket Box PO</span></a>
+            <ul class="sidebar-sub-menu">
+                <li><a href="onProgress.html">On Progress PO</a></li>
+                <li><a href="finished.html">Finished PO</a></li>
+            </ul>
+        </li>
+
+        <div class="about" style="position: fixed; bottom: 10px; left:10px;">
+            <a class="nav-link" style="color:rgba(255, 255, 255, 0.5);" href="">About</a>
+            <a class="nav-link" style="color:rgba(255, 255, 255, 0.5);" href="">How To</a>
+        </div>
+
+    </div>
+    
+    <!---------------- form input SAP Number ------------------->
+    <div class="box-create-po">
+        <div calss="container">
+            <div class=" form-create-po row">
+                <form class="form-inline form-inline-custom">
+                    <div class="form-group mb-2">
+                        <label for="staticEmail2" class="sr-only">SAP Contract Number</label>
+                        <input type="text" readonly class="form-control-plaintext text-center" id="sapContractNumber" value="SAP Contract Number">
+                    </div>
+                    <div class="form-group mx-sm-4 mb-2">
+                        <label for="inputPassword2" class="sr-only">Password</label>
+                        <input type="text" class="form-control" id="searchSap" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2 btn-custom" id="goToButton">
+                        Go To <i class="fas fa-sign-in-alt fa-fw"></i></button>
+                </form> 
+            </div>
+        </div>
+
+        <!------------------ table create PO  ---------------->
+        <div class="box-table-po">
+            <table class="table table-bordered text-center bg-white table-striped">
+                <thead>
+                    <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">SAP Contract No</th>
+                    <th scope="col">Old SAP No</th>
+                    <th scope="col">Scope of Work</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">PO Date</th>
+                    <th scope="col">Expire Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th id="noTableCreate"scope="row">1</th>
+                    <td id="sapContractNumber">
+                        <a href="poSummaryScm.html">0000000000</a>
+                    </td>
+                    <td id="oldSapNumber">000000000</td>
+                    <td id="scopeOfwork">Purchasing</td>
+                    <td id="totalPrice">200.000.000</td>
+                    <td id="poDate">23-11-2018</td>
+                    <td id="poExpireDate">23-11-2018</td>
+                    </tr>
+                    <tr>
+                    <th id=""scope="row">2</th>
+                    <td id=""></td>
+                    <td id=""></td>
+                    <td id=""></td>
+                    <td id=""></td>
+                    <td id=""></td>
+                    <td id=""></td>
+                    </tr>
+                    <tr>
+                    <th id=""scope="row">3</th>
+                    <td id=""></td>
+                    <td id=""></td>
+                    <td id=""></td>
+                    <td id=""></td>
+                    <td id=""></td>
+                    <td id=""></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,269 @@
+
+/* ------ navbar ------- */
+
+body{
+    font-family: sans-serif;
+    background: rgb(187, 186, 186);
+}
+
+.btn-custom2{
+    color:white;
+}
+
+.btn-custom2:hover{
+    color:rgb(255, 157, 0);
+    text-decoration: none;
+}
+
+.navbar-custom{
+    background: linear-gradient(to right, #000066 7%, #cc0099 100%) !important;
+}
+/* ---------------- side navbar ----------------- */
+
+.nav-item{
+    list-style: none;
+}
+
+.sidenav {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    margin-top:52.38px;
+}
+
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 10px;}
+  .sidenav a {font-size: 18px;}
+}
+
+
+.sidebar-text{
+    padding-left:2rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.sidenav .nav-item .nav-link {
+    padding-left:2rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+  
+.sidenav .nav-item .nav-link:hover{
+    background-color: rgba(255, 255, 255, 0.75);
+    color:black;
+}
+
+.active{
+    background: rgba(255, 255, 255, 0.75);
+    color:black;
+}
+
+/* ---------------- side navbar submenu ----------------- */
+.sidebar-sub-menu{
+    margin:0px;
+    padding:0px;
+    list-style: none;
+}
+
+.sidebar-sub-menu li{
+    position: relative;
+}
+
+li .sidebar-sub-menu{
+    display: none;
+}
+
+.sidebar-sub-menu li a{
+    display:block;
+    text-decoration: none;
+    line-height: 20px;
+    color:black;
+    padding:15px;
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.sidebar-sub-menu li a:hover{ 
+    background:#007bff;;
+    color:white;
+}
+
+li:hover ul, li.over ul {display:block;}
+
+
+/* ---------------- isi page ----------------- */
+.main {
+    margin-left: 250px; /* Same as the width of the sidenav */
+    display:grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.header {
+    margin-left: 250px; /* Same as the width of the sidenav */
+    padding-left:20px;
+}
+
+
+ /* ---------------- isi page sebelah kiri ----------------- */   
+ 
+ .box-progress{
+     border:solid 2px rgb(233, 224, 224);
+     padding:20px;
+ }
+
+.text-progress{
+    padding:6px 0px 6px 0px;
+}
+
+  /* ---------------- isi page sebelah tengah ----------------- */ 
+
+
+.panel-image{
+      border:solid 1px #e9251e;
+      height:120px;
+      border-radius:5px;
+      background-color: #e9251e;
+}
+
+.panel-footer{
+    border:solid 1px #e9251e;
+    padding: 5px;
+    border-radius:5px;
+}
+
+.panel-image2{
+      border:solid 1px #02f57ccc;
+      height:120px;
+      border-radius:5px;
+      background-color: #02f57ccc;
+}
+
+.panel-footer2{
+    border:solid 1px #02f57ccc;
+    padding: 5px;
+    border-radius:5px;
+}
+
+/* ---------------- isi page sebelah kanan ----------------- */ 
+.panel-image3{
+      border:solid 1px #0273f5cc;
+      height:120px;
+      border-radius:5px;
+      background-color: #0273f5cc;
+}
+
+.panel-footer3{
+    border:solid 1px #0273f5cc;
+    padding: 5px;
+    border-radius:5px;
+}
+
+.panel-image4{
+      border:solid 1px #e6e200f6;
+      height:120px;
+      border-radius:5px;
+      background-color: #e6e200f6;
+}
+
+.panel-footer4{
+    border:solid 1px #e6e200f6;
+    padding: 5px;
+    border-radius:5px;
+}
+
+  /* ---------------- page create PO ----------------- */ 
+
+.box-create-po {
+    margin-left: 250px; /* Same as the width of the sidenav */
+}
+
+ /* ---------------- form create PO ----------------- */ 
+.form-create-po{
+    padding:30px;
+}
+
+.btn-custom:hover{
+    background: orange;
+}
+
+.form-inline-custom{
+    margin: auto;
+}
+
+/* ---------------- table create PO ----------------- */ 
+.box-table-po{
+    padding:10px;
+    background-color: #007bff;
+    margin:10px;
+}
+
+/* ---------------- page PO Summary ----------------- */ 
+
+.box-po-summary {
+    margin-left: 250px; /* Same as the width of the sidenav */
+    padding:10px;
+}
+
+.po-summary{
+    padding:10px;
+}
+
+/* ---------------- Box Comment ----------------- */ 
+.box-comment{
+    padding:10px;
+}
+
+.box-isi-comment{
+    border:solid 1px rgb(233, 224, 224);
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas: "a a a a a a"
+                         "b b b b b b"
+                         ". . . . . c";
+    padding:10px;
+    border-radius:5px;                  
+}
+
+.custom-name{
+    grid-area:a;
+}
+
+.custom-comment{
+    grid-area:b;
+}
+
+.custom-date{
+    grid-area:c;
+    text-align:right;
+}
+
+/* ---------------- page PO On Progress ----------------- */ 
+
+/* ---------------- Checklist Item ----------------- */ 
+.checklist {
+    width: 30px;
+    height: 30px;
+    background-color: brown;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.checklist--approved {
+    background-color: darkgreen;
+}
+
+.checklist::after {
+    content: "\2713";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1em;
+}
