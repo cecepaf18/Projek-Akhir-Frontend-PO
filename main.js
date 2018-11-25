@@ -1,10 +1,3 @@
-$(document).ready(()=> {
-    $('.nav-link').on('click', () => {
-        $('.sidebar-sub-menu').toggle();
-    });
-});
-
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
