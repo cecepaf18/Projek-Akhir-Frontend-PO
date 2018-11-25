@@ -399,7 +399,8 @@ def login():
 
         if userDB:
             payload = {
-                "email" : userDB.email
+                "email" : userDB.email,
+                "token" :userDB.token
             }
 #    bikin token jwt
             encoded = jwt.encode(payload, jwtSecretKey, algorithm='HS256')
