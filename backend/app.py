@@ -437,6 +437,33 @@ def login():
 
 #     return (json.dumps(marshal(po_items, item_json)))
 
+# Authorization
+# buat ngebatesin cuma requester yang bisa create PO
+def authRequester(): #buat ngebatesin selain requester
+    data =request.get_json()
+
+    username = data.get('username')
+
+    userDB = User.query.filter_by(user_name=username)
+    role = userDB.role
+    if role == 1:
+        return "Access Granted", 200
+    else:
+        return "Access Denied", 405
+
+def authApprover():
+    data = request.get_json()
+
+    username = data.get('username')
+    userDB = User.query.filter_by(user_name = username)
+    role = userDB.role
+    if role != 1:
+        return "Access Granted", 200
+    else:
+        return "Access Denied", 405
+
+@app.route('getContract')
+def getContract():
 
 
 
