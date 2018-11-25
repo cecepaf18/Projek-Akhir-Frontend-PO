@@ -247,17 +247,33 @@ li:hover ul, li.over ul {display:block;}
 .checklist {
     width: 30px;
     height: 30px;
-    background-color: brown;
+    background-color: darkgreen;
     border-radius: 50%;
     margin: auto;
 }
 
-.checklist--approved {
-    background-color: darkgreen;
-}
-
 .checklist::after {
     content: "\2713";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1em;
+}
+
+.not-checklist {
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.not-checklist::after {
+    content: "\2717";
     height: 100%;
     display: flex;
     justify-content: center;
