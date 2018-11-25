@@ -464,9 +464,30 @@ def authApprover():
 
 @app.route('getContract')
 def getContract():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
 
+    email = decoded["email"]
+    data = User.query.filter_by(email=email).first()
+    dataUser = Contract.query.filter_by(user_id=data.id).all()
+    
+    if dataUser:
+        contractDetail = {
+            "contract_start" : fields.String,
+            "contract_end" : fields.String,
+            "vendor_name" : fields.String,
+            "scope_of_work" : fields.String,
+            "total_price" : fields.Integer,
+            "SAP_contract_number" : fields.String,
+            "SAP_SR_number" : fields.String,
+            "BPM_contract_number" : fields.String,
+            "BPM_SR_number" : fields.String,
+            "BPM_PO_number" : fields.String,
+            "cost_center_id" : fields.Integer
+
+        }
+
+        return (json.dumps(marshal(dataUser, contractDetail))) 
 
 
 if __name__ == '__main__':
-    app.run(debug=os.getenv("DEBUG"), host=os.getenv(
-        "HOST"), port=os.getenv("PORT"))
+    app.run(debug=os.getenv("DEBUG"), host=os.getenv("HOST"), port=os.getenv("PORT"))
