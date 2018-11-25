@@ -1,4 +1,4 @@
-!<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -20,7 +20,7 @@
 		<h3 class="text-center text-white">Sign In</h3>
 
 		<div class="box-sign-in text-right">
-			<form class="mb-0">
+			<form class="mb-0" onsubmit="event.preventDefault(); login()" method="POST">
 			<h6 class="text-center mb-3"><strong>Sign In To Start Your Program</strong></h6>
 			<div class="box-form">
 				<input type="text" placeholder="Email" class="input" id="email">
@@ -36,4 +36,5 @@
 
 	</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </html>
