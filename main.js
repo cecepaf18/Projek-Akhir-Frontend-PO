@@ -39,5 +39,45 @@ function login(){
 }
 
 function logout(){
-    document.cookie = 'username=; expires=Sat 25 Aug 2018 00:00:00 UTC;'
+    document.cookie = 'token=; expires=Sun 4 Jan 1920 00:00:00 UTC;';
+    window.location ='/index.html';
+}
+
+function authRequester(){
+    $.ajax({
+        method: 'GET',
+        url : 'http://localhost:5000/authorizationRequester',
+        beforeSend: function (req) {
+            req.setRequestHeader("Content-Type", "application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        success: function(res){
+            alert("Access Granted, Hi Requester!")
+            window.location = '/createPo.html'
+            
+        },
+        error: function(err){
+            console.error(err)
+            alert("Access Denied: your account is not registered as Requester")
+        }
+    })
+     
+}
+
+function checkSession() {
+    $.ajax({
+        method: 'GET',
+        url: 'http://localhost:5000/sessionCheck',
+        beforeSend: function (req) {
+            req.setRequestHeader("Content-Type", "application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        success: function(res){
+            
+        },
+        error: function(err){
+            alert("Please login first")
+            window.location = '/index.html'
+        }
+    })
 }

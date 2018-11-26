@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Scada123@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:adinda@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
@@ -45,8 +45,8 @@ class User(db.Model):
 
 class Contract(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    contract_start = db.Column(db.String())
-    contract_end = db.Column(db.String())
+    po_start = db.Column(db.String())
+    po_end = db.Column(db.String())
     vendor_name = db.Column(db.String())
     scope_of_work = db.Column(db.String())
     total_price = db.Column(db.Integer())
@@ -439,30 +439,31 @@ def login():
 
 # Authorization
 # buat ngebatesin cuma requester yang bisa create PO
+@app.route('/authorizationRequester')
 def authRequester(): #buat ngebatesin selain requester
-    data =request.get_json()
+    
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
+    email = decoded['email']
 
-    username = data.get('username')
-
-    userDB = User.query.filter_by(user_name=username)
-    role = userDB.role
+    userDB = User.query.filter_by(email=email).first()
+    role = userDB.position_id
     if role == 1:
         return "Access Granted", 200
     else:
-        return "Access Denied", 405
+        return "Access Denied", 401
 
-def authApprover():
-    data = request.get_json()
+# def authApprover():
+#     data = request.get_json()
 
-    username = data.get('username')
-    userDB = User.query.filter_by(user_name = username)
-    role = userDB.role
-    if role != 1:
-        return "Access Granted", 200
-    else:
-        return "Access Denied", 405
+#     username = data.get('username')
+#     userDB = User.query.filter_by(user_name = username)
+#     role = userDB.role
+#     if role != 1:
+#         return "Access Granted", 200
+#     else:
+#         return "Access Denied", 401
 
-@app.route('getContract')
+@app.route('/getContract')
 def getContract():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
 
@@ -472,8 +473,8 @@ def getContract():
     
     if dataUser:
         contractDetail = {
-            "contract_start" : fields.String,
-            "contract_end" : fields.String,
+            "po_start" : fields.String,
+            "po_end" : fields.String,
             "vendor_name" : fields.String,
             "scope_of_work" : fields.String,
             "total_price" : fields.Integer,
@@ -487,6 +488,22 @@ def getContract():
         }
 
         return (json.dumps(marshal(dataUser, contractDetail))) 
+
+# buat nambahin ke database table item
+@app.route('/addItem', methods=['POST'])
+def addItem():
+    data = request.get_json()
+
+@app.route('/sessionCheck')
+def checkSession():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
+    email = decoded['email']
+    if email:
+        return "bisa",200
+    else:
+        return "gagal",405
+
+
 
 
 if __name__ == '__main__':
