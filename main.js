@@ -37,3 +37,7 @@ function login(){
         }
     })
 }
+
+function logout(){
+    document.cookie = 'username=; expires=Sat 25 Aug 2018 00:00:00 UTC;'
+}
