@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>About</title>
+	<link rel="icon" type="image/x-icon" src="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    
+    <script src="main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <style>
+    /* Make the image fully responsive */
+    .carousel-inner img {
+        width: 100%;
+        height: 100%;
+    }
+    </style>
+    
+</head>
+<body>
+
+    <!-- navbar -->
+    <nav class="navbar navbar-light navbar-custom">
+        <a class="navbar-brand text-white">CEKIDIN CORPORATION</a>
+        <form class="form-inline">
+            <a class="btn-custom2" href="signIn.html">
+                <i class="fas fa-fw fa-sign-out-alt"></i>Sign Out</a>
+        </form>
+    </nav>
+
+    <!---------- sidebar ------------>
+    <div class="sidenav">
+
+        
+        <div class="sidebar-text-box my-5">
+            <h6 class="sidebar-text" id="namaStaff">Nama Staff Purchasing</h6>
+            <h6 class="sidebar-text" id="rolePosition">Role Position</h6>
+            <h6 class="sidebar-text" id="npwp">NPWP</h6>
+        </div>
+          
+        <li class="nav-item">
+            <a class="nav-link" href="dashBoard.html">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="createPo.html">
+            <i class="fas fa-fw fa-file"></i>
+            <span>Create PO</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="requestPo.html">
+            <i class="fas fa-fw fa-file"></i>
+            <span>Request PO</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="">
+            <i class="fas fa-fw fa-ticket-alt"></i>
+            <span>Ticket Box</span></a>
+            <ul class="sidebar-sub-menu">
+                <li><a href="onProgress.html">On Progress PO</a></li>
+                <li><a href="finished.html">Finished PO</a></li>
+            </ul>
+        </li>
+
+        <div class="about" style="position: fixed; bottom: 10px; left:10px;">
+            <a class="nav-link" style="color:rgba(255, 255, 255, 0.5);" href="about.html">About</a>
+            <a class="nav-link" style="color:rgba(255, 255, 255, 0.5);" href="">How To</a>
+        </div>
+
+    </div>
+
+    <div class="box-create-about">
+
+        <!------------------ Isi About -------------------->
+        <div class="box-create-about-2">
+            <div class="border-bottom">
+                <div class="row mb-5">
+                    <div class="col-sm p-5">
+                        <h1>CEKIDIN CORPORATION</h1>
+                        <p class="text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem nam ea officia, architecto iusto dolor neque nemo adipisci nobis minima dolore esse error facere officiis minus, ad quam facilis. Consectetur!</p>
+                    </div>
+                    <div class="col-sm">
+                        <div id="demo" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ul class="carousel-indicators">
+                                <li data-target="#demo" data-slide-to="0" class="active"></li>
+                                <li data-target="#demo" data-slide-to="1"></li>
+                                <li data-target="#demo" data-slide-to="2"></li>
+                            </ul>
+
+                             <!-- The slideshow -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                <img src="gambar/joshua-rawson-harris-668614-unsplash.jpg" alt="Los Angeles" width="1100" height="500">
+                                </div>
+                                <div class="carousel-item">
+                                <img src="gambar/math-83287-unsplash.jpg" alt="Chicago" width="1100" height="500">
+                                </div>
+                                <div class="carousel-item">
+                                <img src="gambar/andre-sanano-36243-unsplash.jpg" alt="New York" width="1100" height="500">
+                                </div>
+                            </div>
+
+                            <!-- Left and right controls -->
+                            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#demo" data-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </a>
+    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="intro">
+                    <h1 class="text-center pb-3 bold">Introducing Our Team</h1>
+                    <div class="card-deck p-3">
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                            <h5 class="card-title">Manager</h5>
+                            <p class="card-text">Adinda Riztia</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                            <h5 class="card-title">SCM</h5>
+                            <p class="card-text">Cecep Ahmad Fauzi</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                            <h5 class="card-title">Requester</h5>
+                            <p class="card-text">Riki Permana</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</html>

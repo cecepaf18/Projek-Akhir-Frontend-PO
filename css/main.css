@@ -283,3 +283,18 @@ li:hover ul, li.over ul {display:block;}
     color: #fff;
     font-size: 1em;
 }
+
+/* ---------------- page About ----------------- */ 
+
+/* ---------------- Isi About ----------------- */ 
+
+.box-create-about{
+    margin-left: 250px;
+    border:solid 1px #e6e200f6;
+}
+
+.box-create-about-2{
+    border:solid 1px red;
+    margin: 10px;
+    background:#fff;
+}
