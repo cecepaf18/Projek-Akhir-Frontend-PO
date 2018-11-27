@@ -290,11 +290,164 @@ li:hover ul, li.over ul {display:block;}
 
 .box-create-about{
     margin-left: 250px;
-    border:solid 1px #e6e200f6;
 }
 
 .box-create-about-2{
-    border:solid 1px red;
     margin: 10px;
     background:#fff;
+}
+/* ---------------- page How To ----------------- */ 
+
+/* ---------------- Isi How To ----------------- */ 
+
+.box-how-to{
+    margin-left: 250px;
+}
+
+.box-how-to-2{
+
+    margin: 10px;
+    background:#fff;
+    display:grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-areas: "a b c l k . ."
+                         ". . d . j . ."
+                         ". . f g h . ."
+                         ". . . . i . ."
+                         ". . . . m . ."
+                         ". . . . n . ."
+                         ". . . . o . ."
+                         ". . . . p . ."
+                         ". . . . q r s"
+                         ;
+    padding:10px;
+    
+}
+
+.mulai {
+    width: 50px;
+    height: 50px;
+    background-color: darkgreen;
+    border-radius: 50%;
+    margin: auto;
+    grid-area: a;
+}
+
+.mulai::after {
+    content: "start";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1em;
+}
+
+.arrow{
+    grid-area: b;
+}
+
+.btn-how-custom{
+    grid-area:c;
+}
+
+.arrowBottom{
+    grid-area:d;
+}
+
+.btn-how-custom-2{
+    grid-area:f;
+}
+
+.arrow-right-1{
+    grid-area: g;
+}
+
+
+.approve {
+    width: 50px;
+    height: 50px;
+    background-color: orange;
+    margin: auto;
+    grid-area: h ;
+    transform: rotate(45deg);
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.approve::after {
+    content: "approved?";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 10px;
+    transform: rotate(-45deg);
+
+}
+
+.arrowBottom-3{
+    grid-area:i;
+}
+
+.arrow-up-1{
+    grid-area: j;
+}
+
+.arrow-left-1{
+    grid-area: k;
+}
+
+.arrow-left-2{
+    grid-area: l;
+}
+
+.btn-how-custom-3{
+    grid-area: m;
+}
+
+.arrowBottom-4{
+    grid-area: n;
+}
+
+.btn-how-custom-4{
+    grid-area:o; 
+}
+
+.arrowBottom-5{
+    grid-area: p;
+}
+
+.btn-how-custom-5{
+    grid-area:q;
+}
+
+.arrow-right-2{
+    grid-area: r;
+}
+
+.selesai {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(231, 6, 6, 0.904);
+    border-radius: 50%;
+    margin: auto;
+    grid-area: s;
+}
+
+.selesai::after {
+    content: "end";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1em;
 }
