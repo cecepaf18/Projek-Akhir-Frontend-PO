@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Scada123@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:adinda@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
@@ -45,8 +45,8 @@ class User(db.Model):
 
 class Contract(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    contract_start = db.Column(db.String())
-    contract_end = db.Column(db.String())
+    po_start = db.Column(db.String())
+    po_end = db.Column(db.String())
     vendor_name = db.Column(db.String())
     scope_of_work = db.Column(db.String())
     total_price = db.Column(db.Integer())
@@ -439,34 +439,72 @@ def login():
 
 # Authorization
 # buat ngebatesin cuma requester yang bisa create PO
+@app.route('/authorizationRequester')
 def authRequester(): #buat ngebatesin selain requester
-    data =request.get_json()
+    
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
+    email = decoded['email']
 
-    username = data.get('username')
-
-    userDB = User.query.filter_by(user_name=username)
-    role = userDB.role
+    userDB = User.query.filter_by(email=email).first()
+    role = userDB.position_id
     if role == 1:
         return "Access Granted", 200
     else:
-        return "Access Denied", 405
+        return "Access Denied", 401
 
-def authApprover():
+# def authApprover():
+#     data = request.get_json()
+
+#     username = data.get('username')
+#     userDB = User.query.filter_by(user_name = username)
+#     role = userDB.role
+#     if role != 1:
+#         return "Access Granted", 200
+#     else:
+#         return "Access Denied", 401
+
+@app.route('/getContract')
+def getContract():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+
+    email = decoded["email"]
+    data = User.query.filter_by(email=email).first()
+    dataUser = Contract.query.filter_by(user_id=data.id).all()
+    
+    if dataUser:
+        contractDetail = {
+            "po_start" : fields.String,
+            "po_end" : fields.String,
+            "vendor_name" : fields.String,
+            "scope_of_work" : fields.String,
+            "total_price" : fields.Integer,
+            "SAP_contract_number" : fields.String,
+            "SAP_SR_number" : fields.String,
+            "BPM_contract_number" : fields.String,
+            "BPM_SR_number" : fields.String,
+            "BPM_PO_number" : fields.String,
+            "cost_center_id" : fields.Integer
+
+        }
+
+        return (json.dumps(marshal(dataUser, contractDetail))) 
+
+# buat nambahin ke database table item
+@app.route('/addItem', methods=['POST'])
+def addItem():
     data = request.get_json()
 
-    username = data.get('username')
-    userDB = User.query.filter_by(user_name = username)
-    role = userDB.role
-    if role != 1:
-        return "Access Granted", 200
+@app.route('/sessionCheck')
+def checkSession():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
+    email = decoded['email']
+    if email:
+        return "bisa",200
     else:
-        return "Access Denied", 405
+        return "gagal",405
 
-@app.route('getContract')
-def getContract():
 
 
 
 if __name__ == '__main__':
-    app.run(debug=os.getenv("DEBUG"), host=os.getenv(
-        "HOST"), port=os.getenv("PORT"))
+    app.run(debug=os.getenv("DEBUG"), host=os.getenv("HOST"), port=os.getenv("PORT"))
