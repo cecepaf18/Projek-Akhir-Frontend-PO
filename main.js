@@ -1,3 +1,8 @@
+$(document).ready(function(){
+    $('#loading').hide();
+
+})
+
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -19,6 +24,7 @@ function login(){
         method: 'POST',
         url: 'http://localhost:5000/login',
         beforeSend: function(req) {
+            $('#loading').show();
             req.setRequestHeader("Content-Type", "application/json");
         },
         data : JSON.stringify({
@@ -32,8 +38,8 @@ function login(){
         },
         error: function(err) {
             console.log(err)
-
-
+            $('#description').text('Failed');
+            window.location = "/index.html"
         }
     })
 }
@@ -239,3 +245,5 @@ function getAllDataItem() {
         display.value = total_price   
     })
   }
+
+ 

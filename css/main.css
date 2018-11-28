@@ -105,6 +105,7 @@ body{
  .box-progress{
      border:solid 2px rgb(233, 224, 224);
      padding:20px;
+     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
  }
 
 .text-progress{
@@ -119,12 +120,14 @@ body{
       height:120px;
       border-radius:5px;
       background-color: #e9251e;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .panel-footer{
     border:solid 1px #e9251e;
     padding: 5px;
     border-radius:5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .panel-image2{
@@ -132,12 +135,14 @@ body{
       height:120px;
       border-radius:5px;
       background-color: #02f57ccc;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .panel-footer2{
     border:solid 1px #02f57ccc;
     padding: 5px;
     border-radius:5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 /* ---------------- isi page sebelah kanan ----------------- */ 
@@ -146,12 +151,14 @@ body{
       height:120px;
       border-radius:5px;
       background-color: #0273f5cc;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .panel-footer3{
     border:solid 1px #0273f5cc;
     padding: 5px;
     border-radius:5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .panel-image4{
@@ -159,12 +166,14 @@ body{
       height:120px;
       border-radius:5px;
       background-color: #e6e200f6;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .panel-footer4{
     border:solid 1px #e6e200f6;
     padding: 5px;
     border-radius:5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
   /* ---------------- page create PO ----------------- */ 
@@ -443,3 +452,4 @@ body{
     color: #fff;
     font-size: 1em;
 }
+
