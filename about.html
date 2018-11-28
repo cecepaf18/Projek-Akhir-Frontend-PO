@@ -71,13 +71,16 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="">
-            <i class="fas fa-fw fa-ticket-alt"></i>
-            <span>Ticket Box</span></a>
-            <ul class="sidebar-sub-menu">
-                <li><a href="onProgress.html">On Progress PO</a></li>
-                <li><a href="finished.html">Finished PO</a></li>
-            </ul>
+            <div class="dropdown">
+                <p type="text" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                    <i class="fas fa-fw fa-ticket-alt"></i>
+                    <span>Ticket Box PO</span>
+                </p>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="onProgress.html"><i class="fas fa-fw fa-tasks"></i> On Progress PO</a>
+                    <a class="dropdown-item" href="finished.html"><i class="fas fa-fw fa-check-circle"></i> Finished PO</a>
+                </div>
+            </div>
         </li>
 
         <div class="about" style="position: fixed; bottom: 10px; left:10px;">

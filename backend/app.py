@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:adinda@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abahaos38@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
