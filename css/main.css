@@ -17,6 +17,7 @@ body{
 
 .navbar-custom{
     background: linear-gradient(to right, #000066 7%, #cc0099 100%) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 /* ---------------- side navbar ----------------- */
 
@@ -28,11 +29,9 @@ body{
     height: 100%;
     width: 250px;
     position: fixed;
-    z-index: 1;
     top: 0;
     left: 0;
     background-color: #111;
-    /* overflow-x: hidden; */
     margin-top:52.38px;
 }
 
@@ -322,7 +321,7 @@ body{
                          ". . . . q r s"
                          ;
     padding:10px;
-    
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .mulai {
@@ -453,3 +452,20 @@ body{
     font-size: 1em;
 }
 
+/* ---------------- Loading ----------------- */ 
+
+.loading
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    text-align:center;
+    background-color: #fff;
+}
+
+.loading img{
+    margin-top: 10%;
+}

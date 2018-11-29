@@ -59,6 +59,7 @@ function authRequester(){
         },
         success: function(res){
             alert("Access Granted, Hi Requester!")
+            $('#loading').show();
             window.location = '/createPo.html'
             
         },

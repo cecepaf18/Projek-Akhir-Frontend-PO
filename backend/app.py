@@ -26,13 +26,13 @@ class Roles(db.Model):
     role = db.Column(db.String())
 
 
-class Costcenter(db.Model):
+class costcenter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     costcenter_name = db.Column(db.String)
     description = db.Column(db.String)
 
 
-class User(db.Model):
+class user(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String())
     payroll_number = db.Column(db.Integer())
@@ -43,7 +43,7 @@ class User(db.Model):
     position_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
 
-class Contract(db.Model):
+class contract(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     po_start = db.Column(db.String())
     po_end = db.Column(db.String())
@@ -60,7 +60,7 @@ class Contract(db.Model):
     process_id = db.Column(db.Integer())
 
 
-class Items(db.Model):
+class items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_name = db.Column(db.String())
     type = db.Column(db.String())
@@ -72,7 +72,7 @@ class Items(db.Model):
     contract_id = db.Column(db.Integer, db.ForeignKey('contract.id'))
 
 
-class Approval(db.Model):
+class approval(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     scm_approval = db.Column(db.Integer())
     manager_approval = db.Column(db.Integer())
@@ -94,7 +94,7 @@ def create_record():
         req_email = request_data['email']
         req_comment = request_data['comment']
 
-        userDB = User.query.filter_by(email=req_email).first()
+        userDB = user.query.filter_by(email=req_email).first()
         if userDB is not None:
             user_token = userDB.token
             print(user_token)
@@ -228,7 +228,7 @@ def scm_decision():
         req_email = request_data['email']
         req_comment = request_data['comment']
         req_decision = request_data['decision']
-        userDB = User.query.filter_by(email=req_email).first()
+        userDB = user.query.filter_by(email=req_email).first()
         # contractDB = Contract.query.filter_by()
 
         def recursive():
@@ -282,7 +282,7 @@ def managerApproved():
         req_email = request_data['email']
         req_comment = request_data['comment']
         
-        userDB = User.query.filter_by(email=req_email).first()
+        userDB = user.query.filter_by(email=req_email).first()
         # contractDB = Contract.query.filter_by()
 
         def recursive():
@@ -334,7 +334,7 @@ def ownerApproved():
         req_email = request_data['email']
         req_comment = request_data['comment']
         
-        userDB = User.query.filter_by(email=req_email).first()
+        userDB = user.query.filter_by(email=req_email).first()
         # contractDB = Contract.query.filter_by()
 
         def recursive():
@@ -395,7 +395,7 @@ def login():
         email = data.get('email')
         password = data.get('password')
         # print(username, password)
-        userDB = User.query.filter_by(email=email, password=password).first()
+        userDB = user.query.filter_by(email=email, password=password).first()
 
         if userDB:
             payload = {
@@ -421,7 +421,7 @@ def login():
 #     contract = Contract.query.filter_by(id = contract_id)
 #     costcenter = Costcenter.query.filter_by(id= Contract.cost_center_id)
 #     items = Items.query.filter_by(contract_id = contract_id)
-#     user = User.query.filter_by(id = approval.user_id)
+#     user = user.query.filter_by(id = approval.user_id)
 
 #     item_json = {
 #         "item_name" : fields.String,
@@ -445,7 +445,7 @@ def authRequester(): #buat ngebatesin selain requester
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
     email = decoded['email']
 
-    userDB = User.query.filter_by(email=email).first()
+    userDB = user.query.filter_by(email=email).first()
     role = userDB.position_id
     if role == 1:
         return "Access Granted", 200
@@ -456,7 +456,7 @@ def authRequester(): #buat ngebatesin selain requester
 #     data = request.get_json()
 
 #     username = data.get('username')
-#     userDB = User.query.filter_by(user_name = username)
+#     userDB = user.query.filter_by(user_name = username)
 #     role = userDB.role
 #     if role != 1:
 #         return "Access Granted", 200
@@ -468,8 +468,8 @@ def getContract():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
 
     email = decoded["email"]
-    data = User.query.filter_by(email=email).first()
-    dataUser = Contract.query.filter_by(user_id=data.id).all()
+    data = user.query.filter_by(email=email).first()
+    dataUser = contract.query.filter_by(user_id=data.id).all()
     
     if dataUser:
         contractDetail = {
