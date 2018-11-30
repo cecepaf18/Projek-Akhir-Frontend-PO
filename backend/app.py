@@ -26,13 +26,13 @@ class Roles(db.Model):
     role = db.Column(db.String())
 
 
-class costcenter(db.Model):
+class Costcenter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     costcenter_name = db.Column(db.String)
     description = db.Column(db.String)
 
 
-class user(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String())
     payroll_number = db.Column(db.Integer())
@@ -43,7 +43,7 @@ class user(db.Model):
     position_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
 
-class contract(db.Model):
+class Contract(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     po_start = db.Column(db.String())
     po_end = db.Column(db.String())
@@ -58,9 +58,11 @@ class contract(db.Model):
     cost_center_id = db.Column(db.Integer, db.ForeignKey('costcenter.id'))
     record_id = db.Column(db.Integer())
     process_id = db.Column(db.Integer())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    currency = db.Column(db.String())
+    plant = db.Column(db.String())
 
-
-class items(db.Model):
+class Items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_name = db.Column(db.String())
     type = db.Column(db.String())
@@ -71,8 +73,18 @@ class items(db.Model):
     note = db.Column(db.String())
     contract_id = db.Column(db.Integer, db.ForeignKey('contract.id'))
 
+class Header(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    representative = db.Column(db.String())
+    to_provide = db.Column(db.String())
+    location = db.Column(db.String())
+    note = db.Column(db.String())
+    budget_source = db.Column(db.String())
+    service_charge_type = db.Column(db.String())
+    contract_id = db.Column(db.Integer, db.ForeignKey('contract.id'))
 
-class approval(db.Model):
+
+class Approval(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     scm_approval = db.Column(db.Integer())
     manager_approval = db.Column(db.Integer())
@@ -80,21 +92,22 @@ class approval(db.Model):
     contract_id = db.Column(db.Integer, db.ForeignKey('contract.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-
 #########################
 ####### NEXTFLOW ########
 #########################
 
-@app.route('/submitToSCM', methods=['POST'])
+@app.route('/createRecord', methods=['POST'])
 # inisiasi nextflow atau create record
 
 def create_record():
+    print(os.getenv('DEFINITION_ID'))
     if request.method == 'POST':
+        decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
         request_data = request.get_json()
-        req_email = request_data['email']
-        req_comment = request_data['comment']
+        req_username = decoded["username"]
+                
 
-        userDB = user.query.filter_by(email=req_email).first()
+        userDB = User.query.filter_by(user_name=req_username).first()
         if userDB is not None:
             user_token = userDB.token
             print(user_token)
@@ -118,24 +131,20 @@ def create_record():
             # sumbit flow menggunakan record_id dan token
             submit_result = submit_record(record_id, user_token)
 
-            # gerakin flow darri requester ke manager
-            submit_to_scm(
-                req_comment, user_token, submit_result['data']['process_id'])
-
             # masukkin data ke database
-            data_db = submit_to_database(
-                record_id, submit_result['data']['process_id'])
+            data_db = submit_to_database(record_id, submit_result["data"]["process_id"],req_username)
+            print(submit_result["data"]["process_id"])
 
             # return berupa id dan statusnya
             return "data_db", 200
         else:
             return "Token not found", 404
 
-# fungsi untuk sumbit record dan gerakin flow ke requester
 
 
 def submit_record(record_id, user_token):
     # data template untuk submit record
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
     record_instance = {
         "data": {
             "form_data": {
@@ -154,20 +163,44 @@ def submit_record(record_id, user_token):
         "Content-Type": "application/json", "Authorization": "Bearer %s" % user_token})
 
     result = json.loads(r.text)
-    # print("submit record", result)
+    print(result)
     return result
 
+# fungsi untuk submit data ke db
+def submit_to_database(record_id, process_id,username):
+    request_data = request.get_json()
+    req_sap_contract_number = request_data['sap contract number']
+    userDB = User.query.filter_by(user_name=username).first()
+    data_db = Contract.query.filter_by(SAP_contract_number = req_sap_contract_number).first()
+   
+    data_db.record_id = record_id
+    data_db.process_id = process_id
+    data_db.user_id = userDB.id
+
+    db.session.commit()
+   
+    return "Record berhasil dibuat"
+
+
+@app.route('/submitToSCM', methods=['POST'])
 # fungsi untuk gerakin flow dari requester ke manager
-
-
-def submit_to_scm(req_comment, user_token, process_id):
-    print("ini process id", process_id)
-    # get task id and pVManager name
-
+def submit_to_scm():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    request_data = request.get_json()
+    req_comment = request_data['comment']
+    req_SAP_contract_number = request_data['SAP contract number']
+    req_username = decoded["username"]
+    
+    contract_doc = Contract.query.filter_by(SAP_contract_number = req_SAP_contract_number).first()
+    process_id = contract_doc.process_id
+    userDB = User.query.filter_by(user_name=req_username).first()    
+    user_token = userDB.token
+    print(process_id)
+       
     def recursive():
         query = "folder=app:task:all&filter[name]=Requester&filter[state]=active&filter[definition_id]=%s&filter[process_id]=%s" % (
             os.getenv("DEFINITION_ID"), process_id)
-
+        
         url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
         r_get = requests.get(url, headers={
                              "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token})
@@ -198,44 +231,31 @@ def submit_to_scm(req_comment, user_token, process_id):
             return r_get.text
 
     recursive()
+
     return "result"
-
-
-# fungsi untuk submit data ke db
-def submit_to_database(record_id, process_id):
-    # request_data = request.get_json()
-    # req_cost_center_id = request_data['data']['contract']['cost center id']
-
-    data_db = Contract.query.filter_by(SAP_contract_number="MDC-1234-VII")
-
-    data_db.record_id = record_id
-    data_db.process_id = process_id
-
-    db.session.commit()
-    db.session.flush()
-    
-    if data_db.id is not None:
-        return str(data_db.id)
-    else:
-        return None
 
 
 @app.route('/scmDecision', methods=['POST'])
 # fungsi keputusan dari SCM
 def scm_decision():
     if request.method == "POST":
+        decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
         request_data = request.get_json()
-        req_email = request_data['email']
+        print(decoded['username'])
+        req_username = decoded["username"]
+        req_SAP_contract_number = request_data['SAP contract number']
         req_comment = request_data['comment']
         req_decision = request_data['decision']
-        userDB = user.query.filter_by(email=req_email).first()
-        # contractDB = Contract.query.filter_by()
+
+        userDB = User.query.filter_by(user_name=req_username).first()
+        contract_doc = Contract.query.filter_by(SAP_contract_number = req_SAP_contract_number).first()
+        process_id = contract_doc.process_id
+        print(process_id)
+        
 
         def recursive():
             if userDB is not None:
                 user_token = userDB.token
-                print(user_token)
-                process_id = "instances:bpmn:a119dc5a-702d-43a4-a1b4-b2593f9da21f" 
                 query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[process_id]=%s&filter[definition_id]=%s" % (process_id,os.getenv("DEFINITION_ID"))
                 url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
@@ -244,7 +264,7 @@ def scm_decision():
                 })
                 result = json.loads(r_get.text)
                 print("loading")
-                print(result)
+                
                 if result['data'] is None or len(result['data']) == 0:
                     recursive()
                 else:
@@ -271,6 +291,7 @@ def scm_decision():
                     return r_get.text
 
         recursive()
+        submitApproval(req_username,contract_doc.id)
         return "flow sudah sampai manager"
 
 
@@ -278,17 +299,21 @@ def scm_decision():
 # fungsi keputusan dari SCM
 def managerApproved():
     if request.method == "POST":
+        decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
         request_data = request.get_json()
-        req_email = request_data['email']
+
+        req_username = decoded["username"]
+        req_SAP_contract_number = request_data['SAP contract number']
         req_comment = request_data['comment']
         
-        userDB = user.query.filter_by(email=req_email).first()
+        userDB = User.query.filter_by(user_name=req_username).first()
+        contract_doc = Contract.query.filter_by(SAP_contract_number = req_SAP_contract_number).first()
+        process_id = contract_doc.process_id
         # contractDB = Contract.query.filter_by()
 
         def recursive():
             if userDB is not None:
                 user_token = userDB.token
-                process_id = "instances:bpmn:a119dc5a-702d-43a4-a1b4-b2593f9da21f" 
                 query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Manager Approval&filter[state]=active&filter[process_id]=%s&filter[definition_id]=%s" % (process_id,os.getenv("DEFINITION_ID"))
                 url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
@@ -323,6 +348,7 @@ def managerApproved():
                     return r_get.text
 
         recursive()
+        submitApproval(req_username,contract_doc.id)
         return "flow sudah sampai CO"
 
 
@@ -330,17 +356,20 @@ def managerApproved():
 # fungsi keputusan dari SCM
 def ownerApproved():
     if request.method == "POST":
+        decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
         request_data = request.get_json()
-        req_email = request_data['email']
+
+        req_username = decoded['username']
+        req_SAP_contract_number = request_data['SAP contract number']
         req_comment = request_data['comment']
         
-        userDB = user.query.filter_by(email=req_email).first()
-        # contractDB = Contract.query.filter_by()
-
+        userDB = User.query.filter_by(user_name=req_username).first()
+        contract_doc = Contract.query.filter_by(SAP_contract_number = req_SAP_contract_number).first()
+        process_id = contract_doc.process_id
+        
         def recursive():
             if userDB is not None:
                 user_token = userDB.token
-                process_id = "instances:bpmn:a119dc5a-702d-43a4-a1b4-b2593f9da21f" 
                 query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Contract Owner Approval&filter[state]=active&filter[process_id]=%s&filter[definition_id]=%s" % (process_id,os.getenv("DEFINITION_ID"))
                 url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
@@ -374,11 +403,24 @@ def ownerApproved():
                     return r_get.text
 
         recursive()
+        submitApproval(req_username,contract_doc.id)
         return "Release PO"
         
 
-        
+def submitApproval(username, contract_id):
+    data_db = Approval.query.filter_by(contract_id = contract_id).first()
+    dbUser = User.query.filter_by(user_name=username).first()
+    role_id = dbUser.role
 
+    if role_id == 2:
+        data_db.scm_approval = 1
+    elif role_id == 3:
+        data_db.manager_approval = 1
+    elif role_id == 4:
+        data_db.contract_owner_approval =1
+
+    db.commit()
+    return "approved by ",str(dbUser.user_name)
 
 
 
@@ -395,11 +437,12 @@ def login():
         email = data.get('email')
         password = data.get('password')
         # print(username, password)
-        userDB = user.query.filter_by(email=email, password=password).first()
+        userDB = User.query.filter_by(email=email, password=password).first()
 
         if userDB:
             payload = {
-                "email" : userDB.email
+                "email" : userDB.email,
+                "username" : userDB.user_name                
             }
 #    bikin token jwt
             encoded = jwt.encode(payload, jwtSecretKey, algorithm='HS256')
@@ -409,67 +452,226 @@ def login():
     else:
         return "Method not allowed", 405
 
+# untuk memeriksa apakah sudah login
+@app.route('/sessionCheck')
+def checkSession():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
+    email = decoded['email']
+    if email:
+        return "bisa",200
+    else:
+        return "gagal",405
 
-# # get all data for summary form
-# @app.route('/getsummary', methods=['GET'])
-# def getSummary():
-#     request_data = request.get_json()
-#     contract_id = request_data('contract_id')
+# routing to get user profile
+@app.route('/userProfile')
+def userProfile():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
+    email = decoded["email"]
 
-#     approval = Approval.query.filter_by(contract_id = contract_id)
-#     comment = Comment.query.filter_by(contract_id = contract_id)
-#     contract = Contract.query.filter_by(id = contract_id)
-#     costcenter = Costcenter.query.filter_by(id= Contract.cost_center_id)
-#     items = Items.query.filter_by(contract_id = contract_id)
-#     user = user.query.filter_by(id = approval.user_id)
+    userDB = User.query.filter_by(email = email).first()
+    userRole = Roles.query.filter_by(id = userDB.position_id).first()
 
-#     item_json = {
-#         "item_name" : fields.String,
-#         "type" : fields.String,
-#         "description" : fields.String,
-#         "storage_location" : fields.String,
-#         "quantity" : fields.Integer,
-#         "price" : fields.Integer,
-#         "note" : fields.String,
-#         "contract_id" : fields.Integer
-#     }
+    json_format = {
+        "id" : userDB.id,
+        "username" : userDB.user_name,
+        "payroll number" : userDB.payroll_number,
+        "photoprofile" : userDB.photoprofile,
+        "email" :userDB.email,
+        "position" : userRole.role
+    }
 
+    user_json = json.dumps(json_format)
+    return user_json, 201
 
-#     return (json.dumps(marshal(po_items, item_json)))
-
-# Authorization
-# buat ngebatesin cuma requester yang bisa create PO
 @app.route('/authorizationRequester')
 def authRequester(): #buat ngebatesin selain requester
     
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
     email = decoded['email']
 
-    userDB = user.query.filter_by(email=email).first()
+    userDB = User.query.filter_by(email=email).first()
     role = userDB.position_id
     if role == 1:
         return "Access Granted", 200
     else:
         return "Access Denied", 401
 
-# def authApprover():
-#     data = request.get_json()
+def authApprover():
+    data = request.get_json()
 
-#     username = data.get('username')
-#     userDB = user.query.filter_by(user_name = username)
-#     role = userDB.role
-#     if role != 1:
-#         return "Access Granted", 200
-#     else:
-#         return "Access Denied", 401
+    username = data.get('username')
+    userDB = User.query.filter_by(user_name = username)
+    role = userDB.role
+    if role != 1:
+        return "Access Granted", 200
+    else:
+        return "Access Denied", 401
+
+# get all data for summary form
+@app.route('/getsummary', methods=['GET'])
+def getSummary():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
+    email = decoded["email"]
+
+    data = request.get_json()
+    contract_number = data['sap contract number']
+    contract_doc = Contract.query.filter_by(SAP_contract_number = contract_number).first()
+    contract_id = contract_doc.id
+
+    userDB = User.query.filter_by(email = email, id = contract_doc.user_id).first()
+    userRole = Roles.query.filter_by(id = userDB.position_id).first()
+    headerDB = Header.query.filter_by(contract_id = contract_id).first()
+    itemDB = Items.query.filter_by(contract_id = contract_id).all()
+
+    summary = []
+
+    item_json = {
+        "item_name" : fields.String,
+        "type" : fields.String,
+        "description" : fields.String,
+        "storage_location" : fields.String,
+        "quantity" : fields.Integer,
+        "price" : fields.Integer,
+        "note" : fields.String,
+        "contract_id" : fields.Integer
+    }
+    item_all = marshal(itemDB, item_json)
+
+    json_format = {
+        "requester name" : userDB.user_name,
+        "payroll number" : userDB.payroll_number,
+        "requester_position" : userRole.role,
+        "process id" : contract_doc.process_id,
+        "po start date" : contract_doc.po_start,
+        "po completion date" : contract_doc.po_end,
+        "bpm sr number" : contract_doc.BPM_SR_number,
+        "bpm contract number" : contract_doc.BPM_contract_number,
+        "bpm po number" : contract_doc.BPM_PO_number,
+        "sap sr number" : contract_doc.SAP_SR_number,
+        "sap contract number" : contract_doc.SAP_contract_number,
+        "currency" : contract_doc.currency,
+        "vendor name" : contract_doc.vendor_name,
+        "plant" : contract_doc.plant,
+        "representative" : headerDB.representative,
+        "to provide" : headerDB.to_provide,
+        "location" : headerDB.location,
+        "note" : headerDB.note,
+        "service charge type" : headerDB.service_charge_type       
+    }
+
+    summary.append(json_format)
+    summary.append(item_all)
+    summary_json = json.dumps(summary)
+
+    return summary_json,200
+    
+# routing untuk menampilkan po approved oleh scm, manager, dan contract owner
+@app.route('/completedPOList')
+def completed_po():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    email = decoded["email"]
+    approvalDB = Approval.query.all()
+    completed_po = []
+
+    for approval in approvalDB:
+        if (approval.scm_approval + approval.manager_approval + approval.contract_owner_approval == 3):
+            userDB = User.query.filter_by(id = approval.user_id, email = email).first()
+            contractDB = Contract.query.filter_by(id = approval.contract_id).first()
+
+            format_json = {
+                "scm approval" : approval.scm_approval,
+                "manager approval" : approval.manager_approval,
+                "contract owner approval" : approval.contract_owner_approval,
+                "requester name" : userDB.user_name,
+                "sap conntract number" : contractDB.SAP_contract_number,
+                "vendor name" : contractDB.vendor_name
+            }
+
+            completed_po.append(format_json)
+
+    return json.dumps(completed_po)
+
+# routing untuk menampilkan po yang belum selesai di approve
+@app.route('/uncompletedPOList')
+def uncompleted_po():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    email = decoded["email"]
+    approvalDB = Approval.query.all()
+    uncompleted_po = []
+
+    for approval in approvalDB:
+        if (approval.scm_approval + approval.manager_approval + approval.contract_owner_approval != 3):
+            userDB = User.query.filter_by(id = approval.user_id, email = email).first()
+            contractDB = Contract.query.filter_by(id = approval.contract_id).first()
+
+            format_json = {
+                "scm approval" : approval.scm_approval,
+                "manager approval" : approval.manager_approval,
+                "contract owner approval" : approval.contract_owner_approval,
+                "requester name" : userDB.user_name,
+                "sap conntract number" : contractDB.SAP_contract_number,
+                "vendor name" : contractDB.vendor_name
+            }
+
+            uncompleted_po.append(format_json)
+
+    return json.dumps(uncompleted_po)
+
+# fungsi untuk menampilkan jumlah dokumen yang perlu di revisi oleh requester
+@app.route('/totalRevise')
+def get_revise():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    email = decoded["email"]
+    userDB = User.query.filter_by(email = email).first()
+    user_token = userDB.token
+
+    query = "folder=app:task:all&filter[name]=Requester&filter[state]=active&filter[definition_id]=%s" % (
+            os.getenv("DEFINITION_ID"))
+        
+    url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
+    r_get = requests.get(url, headers={"Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token})
+    result = json.loads(r_get.text)
+
+    return str(len(result['data']))
+
+# fungsi untuk menampilkan list po yang perlu di revisi
+@app.route('/reviseList')
+def reviset_list():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    email = decoded["email"]
+    userDB = User.query.filter_by(email = email).first()
+    user_token = userDB.token
+
+    query = "folder=app:task:all&filter[name]=Requester&filter[state]=active&filter[definition_id]=%s" % (
+            os.getenv("DEFINITION_ID"))
+        
+    url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
+    r_get = requests.get(url, headers={"Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token})
+    result = json.loads(r_get.text)
+
+    to_revise = []
+    for po in result['data']:
+        process_id = po['process_id']
+        contractDB = Contract.query.filter_by(process_id = process_id).first()
+        userDB = User.query.filter_by(id = contractDB.user_id).first()
+        json_format = {
+            "sap contract number" : contractDB.SAP_contract_number,
+            "requester" : userDB.user_name,
+            "vendor name" : contractDB.vendor_name
+        }
+        to_revise.append(json_format)
+    
+    return json.dumps(to_revise)
+
+
 
 @app.route('/getContract')
 def getContract():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
 
     email = decoded["email"]
-    data = user.query.filter_by(email=email).first()
-    dataUser = contract.query.filter_by(user_id=data.id).all()
+    data = User.query.filter_by(email=email).first()
+    dataUser = Contract.query.filter_by(user_id=data.id).all()
     
     if dataUser:
         contractDetail = {
@@ -494,17 +696,7 @@ def getContract():
 def addItem():
     data = request.get_json()
 
-@app.route('/sessionCheck')
-def checkSession():
-    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithms=['HS256'])
-    email = decoded['email']
-    if email:
-        return "bisa",200
-    else:
-        return "gagal",405
-
-
-
 
 if __name__ == '__main__':
-    app.run(debug=os.getenv("DEBUG"), host=os.getenv("HOST"), port=os.getenv("PORT"))
+    app.run(debug=os.getenv("DEBUG"), host=os.getenv(
+        "HOST"), port=os.getenv("PORT"))

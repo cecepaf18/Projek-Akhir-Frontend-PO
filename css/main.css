@@ -294,7 +294,13 @@ body{
 
 .box-create-about-2{
     margin: 10px;
-    background:#fff;
+    background:rgba(255, 255, 255, 0.472);
+}
+
+.intro{
+    margin: 10px;
+    padding:10px;
+    background:rgba(255, 255, 255, 0.472);
 }
 /* ---------------- page How To ----------------- */ 
 
@@ -307,7 +313,7 @@ body{
 .box-how-to-2{
 
     margin: 10px;
-    background:#fff;
+    background:rgba(255, 254, 254, 0.404);
     display:grid;
     grid-template-columns: repeat(7,1fr);
     grid-template-areas: "a b c l k . ."
@@ -319,6 +325,10 @@ body{
                          ". . . . o . ."
                          ". . . . p . ."
                          ". . . . q r s"
+                         "t t t t . . ."
+                         "u u u u u u u"
+                         "v v v v v v v"
+                         "w w w w w w w"
                          ;
     padding:10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -452,6 +462,21 @@ body{
     font-size: 1em;
 }
 
+.submitReq{
+    grid-area: t;
+}
+
+.scmRev{
+    grid-area: u;
+}
+
+.manager{
+    grid-area: v;
+}
+
+.co{
+    grid-area: w;
+}
 /* ---------------- Loading ----------------- */ 
 
 .loading

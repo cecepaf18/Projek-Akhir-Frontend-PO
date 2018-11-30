@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     
-    <script src="main.js"></script>
+  
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
@@ -99,17 +99,20 @@
                 <i class="fas fa-arrow-right fa-3x"></i>
             </div>
 
-            <button type="button" class="btn btn-primary btn-how-custom font-weight-bold" data-toggle="tooltip" data-placement="top" title="Inisiasi Dokumen PO">
+            <button type="button" class="btn btn-primary btn-how-custom font-weight-bold" id="button1">
                 Submit Requester
             </button>
+            <p class="submitReq" id="p1">Requester / Employee : Inisiasi dokumen PO</p>
 
             <div class="arrowBottom text-center">
                 <i class="fas fa-arrow-down fa-3x"></i>
             </div>
 
-            <button type="button" class="btn btn-primary btn-how-custom-2 font-weight-bold" data-toggle="tooltip" data-placement="top" title="menyetujui permintaan atau meminta revisi jika diperlukan">
+            <button type="button" class="btn btn-primary btn-how-custom-2 font-weight-bold" id="button2" >
                 SCM Reveiwer
             </button>
+            <p class="scmRev" id="p2">SCM Reviewer: menyetujui permintaan atau meminta revisi jika diperlukan</p>
+
 
             <div class="approve"></div>
 
@@ -133,17 +136,19 @@
                 <i class="fas fa-arrow-left fa-3x"></i>
             </div>
 
-            <button type="button" class="btn btn-primary btn-how-custom-3 font-weight-bold" data-toggle="tooltip" data-placement="top" title="menyetujui permintaan">
+            <button type="button" class="btn btn-primary btn-how-custom-3 font-weight-bold" id="button3">
                 Manager Approval
             </button>
+            <p class="manager" id="p3">Manager: menyetujui permintaan</p>
     
             <div class="arrowBottom-4 text-center">
                 <i class="fas fa-arrow-down fa-3x"></i>
             </div>
 
-            <button type="button" class="btn btn-primary btn-how-custom-4 font-weight-bold" data-toggle="tooltip" data-placement="top" title="menyetujui permintaan dan/atau mengubah rincian barang yang terdapat dalam dokumen permintaan">
+            <button type="button" class="btn btn-primary btn-how-custom-4 font-weight-bold" id="button4">
                 Contract Owner Approval
             </button>
+            <p class="co" id="p4">Contract Owner Approver : menyetujui permintaan dan/atau mengubah rincian barang yang terdapat dalam dokumen permintaan</p>
 
             <div class="arrowBottom-5 text-center">
                 <i class="fas fa-arrow-down fa-3x"></i>
@@ -164,9 +169,29 @@
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="main.js"></script>
 <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
+$(document).ready(function(){
+    $("#button1").click(function(){
+        $("#p1").toggle();
     });
+});
+
+$(document).ready(function(){
+    $("#button2").click(function(){
+        $("#p2").toggle();
+    });
+});   
+$(document).ready(function(){
+    $("#button3").click(function(){
+        $("#p3").toggle();
+    });
+});
+
+$(document).ready(function(){
+    $("#button4").click(function(){
+        $("#p4").toggle();
+    });
+});
 </script>
 </html>

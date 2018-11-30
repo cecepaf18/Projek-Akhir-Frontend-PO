@@ -2,6 +2,23 @@ $(document).ready(function(){
     $('#loading').hide();
 
 })
+$(document).ready(function(){
+    $('#p1').hide();
+
+})
+$(document).ready(function(){
+    $('#p2').hide();
+
+})
+$(document).ready(function(){
+    $('#p3').hide();
+
+})
+
+$(document).ready(function(){
+    $('#p4').hide();
+
+})
 
 function getCookie(cname) {
     var name = cname + "=";
